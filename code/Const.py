@@ -3,10 +3,29 @@ C_GRAY = (128, 128, 128)
 C_RED = (84, 43, 58)
 C_WHITE_BLUE = (235, 245, 250)
 
+
+
+W_WIDTH = 576
+W_HEIGHT = 324
+
+
 MENU_OPTION = ( 'START',
                 'SCORE',
                 'EXIT'
                 )
 
-W_WIDTH = 576
-W_HEIGHT = 324
+
+ENTITY_SPEED = {
+    'Level1Bg0': 0,
+    'Level1Bg1': 1,
+    'Level1Bg2': 2,
+    'Level1Bg3': 3,
+    'Level1Bg4': 4,
+    'Level1Bg5': 6,
+    'Level1Bg6': 6,
+    'Level1Bg7': 6,
+    'Level2Bg0': 0,
+    'Level2Bg1': 1,
+    'Level2Bg2': 2,
+    'Player1': 3,
+}
