@@ -14,10 +14,26 @@ class EntityFactory:
                     list_bg.append(Background(f'Level1Bg{i}', position))
                     list_bg.append(Background(f'Level1Bg{i}', (W_WIDTH, 0)))
                 return list_bg
-            case 'Obstacle1Bg':
+
+            case 'Obstacle1':
                 obstacle_width = 46
                 obstacle_height = 66
 
                 x_pos = W_WIDTH - obstacle_width / 2
-                y_pos = W_HEIGHT - obstacle_height - 5
-                return Obstacle('Obstacle1Bg', (x_pos , y_pos))
+                y_pos = W_HEIGHT - obstacle_height - 0
+                return Obstacle('Obstacle1', (x_pos , y_pos))
+            case 'Obstacle2':
+                obstacle_width = 89
+                obstacle_height = 62
+
+                x_pos = W_WIDTH - obstacle_width / 2
+                y_pos = W_HEIGHT - obstacle_height - 0
+                return Obstacle('Obstacle2', (x_pos, y_pos))
+
+            case 'Obstacle3':
+                obstacle_width = 64
+                obstacle_height = 64
+
+                x_pos = W_WIDTH - obstacle_width / 2
+                y_pos = W_HEIGHT - obstacle_height + 15
+                return Obstacle('Obstacle3', (x_pos, y_pos))

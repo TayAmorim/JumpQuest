@@ -1,3 +1,4 @@
+import random
 import sys
 
 import pygame.mixer_music
@@ -16,7 +17,6 @@ class Level:
         self.game_mode = game_mode
         self.entity_list: list[Entity] = []
         self.entity_list.extend(EntityFactory.build_entity(self.name + 'Bg'))
-
         self.obstacle_spacing = 0
 
         pygame.time.set_timer(EVENT_OBSTACLE, SPAWN_TIME)
@@ -36,11 +36,11 @@ class Level:
                     sys.exit()
 
                 if event.type == EVENT_OBSTACLE:
-                    self.obstacle_spacing += 10
+                    choice = random.choice(('Obstacle1', 'Obstacle2', 'Obstacle3'))
+                    self.obstacle_spacing += 20
                     new_position = (W_WIDTH, W_HEIGHT - 35 - self.obstacle_spacing)
-                    self.entity_list.append(EntityFactory.build_entity('Obstacle1Bg', new_position))
+                    self.entity_list.append(EntityFactory.build_entity(choice, new_position))
 
-            self.level_text(18, f'entidades: {len(self.entity_list)}', C_RED, (10, W_HEIGHT - 20))
             pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):

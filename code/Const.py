@@ -26,7 +26,9 @@ ENTITY_SPEED = {
     'Level1Bg5': 6,
     'Level1Bg6': 6,
     'Level1Bg7': 6,
-    'Obstacle1Bg': 3,
+    'Obstacle1': 1,
+    'Obstacle2': 1,
+    'Obstacle3': 1,
     'Level2Bg0': 0,
     'Level2Bg1': 1,
     'Level2Bg2': 2,
@@ -36,4 +38,4 @@ ENTITY_SPEED = {
 
 EVENT_OBSTACLE = pygame.USEREVENT + 1
 
-SPAWN_TIME = 2000
+SPAWN_TIME = 3000
