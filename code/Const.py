@@ -1,3 +1,5 @@
+import pygame
+
 C_GREEN_DARK = (42, 82, 60)
 C_GRAY = (128, 128, 128)
 C_RED = (84, 43, 58)
@@ -24,8 +26,14 @@ ENTITY_SPEED = {
     'Level1Bg5': 6,
     'Level1Bg6': 6,
     'Level1Bg7': 6,
+    'Obstacle1Bg': 3,
     'Level2Bg0': 0,
     'Level2Bg1': 1,
     'Level2Bg2': 2,
     'Player1': 3,
+
 }
+
+EVENT_OBSTACLE = pygame.USEREVENT + 1
+
+SPAWN_TIME = 2000
