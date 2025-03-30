@@ -11,6 +11,7 @@ from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.Obstacle import Obstacle
 from code.Player import Player
+from code.Score import Score
 
 
 class Level:
@@ -24,7 +25,7 @@ class Level:
         self.timeout = TIMEOUT_LEVEL
 
         self.player = EntityFactory.build_entity('Player', (10, W_HEIGHT - 50))
-
+        player_score = self.player.score
         pygame.time.set_timer(EVENT_OBSTACLE, SPAWN_TIME)
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
 
@@ -35,6 +36,7 @@ class Level:
         clock = pygame.time.Clock()
 
         while True:
+            score = Score(self.window)
             clock.tick(60)
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
@@ -42,8 +44,9 @@ class Level:
 
                 if isinstance(ent, Obstacle):
                   if self.player.check_collision(ent):
-                    if not self.game_over():
-                        return
+                    score.save(player_score, 'GAME OVER')
+                    return
+
 
             self.player.move()
             self.player.draw(self.window)
@@ -57,14 +60,14 @@ class Level:
                     self.timeout -= TIMEOUT_STEP
                     player_score += 1
                     if self.timeout == 0:
-                        return True
+                        return player_score
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.player.jump()
                     if event.key == pygame.K_LEFT:
-                        self.player.set_horizontal_velocity(-2)
+                        self.player.set_horizontal_velocity(-1)
                     elif event.key == pygame.K_RIGHT:
-                        self.player.set_horizontal_velocity(2)
+                        self.player.set_horizontal_velocity(1)
 
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
@@ -79,7 +82,7 @@ class Level:
 
                 if event.type == EVENT_OBSTACLE:
                     choice = random.choice(( 'Obstacle1', 'Obstacle2'))
-                    self.obstacle_spacing += random.randint(10, 50)
+                    self.obstacle_spacing += random.randint(40, 70)
                     new_position = (W_WIDTH, W_HEIGHT - 35 - self.obstacle_spacing)
                     self.entity_list.append(EntityFactory.build_entity(choice, new_position))
 
@@ -94,7 +97,7 @@ class Level:
         self.window.blit(source=text_surf, dest=text_rect)
 
     def game_over(self):
-        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 4, 10))
+        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 4, W_HEIGHT // 3))
         pygame.display.flip()
         game_over_screen = True
 

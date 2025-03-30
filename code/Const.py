@@ -26,15 +26,32 @@ ENTITY_SPEED = {
     'Level1Bg5': 6,
     'Level1Bg6': 6,
     'Level1Bg7': 6,
-    'Obstacle1': 1,
-    'Obstacle2': 1,
-    'Obstacle3': 1,
+    'Obstacle1': 2,
+    'Obstacle2': 2,
+    'Obstacle3': 2,
     'Candle1': 1,
-    'Level2Bg0': 0,
-    'Level2Bg1': 1,
-    'Level2Bg2': 2,
+    'Level2Bg0': 2,
+    'Level2Bg1': 3,
+    'Level2Bg2': 4,
     'Player1': 3,
 
+}
+
+SCORE_POS = {
+    'Title': (W_WIDTH / 2, 50),
+    'EnterName': (W_WIDTH / 2, 90),
+    'Label': (W_WIDTH / 2, 90),
+    'Name': (W_WIDTH / 2, 110),
+    0: (W_WIDTH / 2, 110),
+    1: (W_WIDTH / 2, 130),
+    2: (W_WIDTH / 2, 150),
+    3: (W_WIDTH / 2, 170),
+    4: (W_WIDTH / 2, 190),
+    5: (W_WIDTH / 2, 210),
+    6: (W_WIDTH / 2, 230),
+    7: (W_WIDTH / 2, 250),
+    8: (W_WIDTH / 2, 270),
+    9: (W_WIDTH / 2, 290),
 }
 
 EVENT_OBSTACLE = pygame.USEREVENT + 1
@@ -42,5 +59,5 @@ EVENT_TIMEOUT = pygame.USEREVENT + 2
 
 
 TIMEOUT_STEP = 100
-SPAWN_TIME = 3000
-TIMEOUT_LEVEL = 20000
+SPAWN_TIME = 1800
+TIMEOUT_LEVEL = 10000
