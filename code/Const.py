@@ -29,6 +29,7 @@ ENTITY_SPEED = {
     'Obstacle1': 1,
     'Obstacle2': 1,
     'Obstacle3': 1,
+    'Candle1': 1,
     'Level2Bg0': 0,
     'Level2Bg1': 1,
     'Level2Bg2': 2,

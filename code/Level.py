@@ -8,6 +8,8 @@ from pygame.font import Font
 from code.Const import MENU_OPTION, EVENT_OBSTACLE, SPAWN_TIME, C_RED, W_HEIGHT, W_WIDTH
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
+from code.Obstacle import Obstacle
+from code.Player import Player
 
 
 class Level:
@@ -18,6 +20,8 @@ class Level:
         self.entity_list: list[Entity] = []
         self.entity_list.extend(EntityFactory.build_entity(self.name + 'Bg'))
         self.obstacle_spacing = 0
+
+        self.player = EntityFactory.build_entity('Player', (10, W_HEIGHT - 50))
 
         pygame.time.set_timer(EVENT_OBSTACLE, SPAWN_TIME)
 
@@ -31,13 +35,40 @@ class Level:
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
+
+                if isinstance(ent, Obstacle):
+                    self.player.check_collision(ent)
+
+            self.player.move()
+            self.player.draw(self.window)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    return
+
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.player.jump()
+                    if event.key == pygame.K_LEFT:
+                        self.player.set_horizontal_velocity(-2)
+                    elif event.key == pygame.K_RIGHT:
+                        self.player.set_horizontal_velocity(2)
+
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            self.player.jump()
+                        if event.key == pygame.K_LEFT:
+                            self.player.set_horizontal_velocity(-2)
+                        elif event.key == pygame.K_RIGHT:
+                            self.player.set_horizontal_velocity(2)
+                    elif event.type == pygame.KEYUP:
+                        if event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
+                            self.player.set_horizontal_velocity(0)
 
                 if event.type == EVENT_OBSTACLE:
-                    choice = random.choice(('Obstacle1', 'Obstacle2', 'Obstacle3'))
-                    self.obstacle_spacing += 20
+                    choice = random.choice(( 'Obstacle1', 'Obstacle2'))
+                    self.obstacle_spacing += random.randint(10, 50)
                     new_position = (W_WIDTH, W_HEIGHT - 35 - self.obstacle_spacing)
                     self.entity_list.append(EntityFactory.build_entity(choice, new_position))
 
@@ -48,3 +79,9 @@ class Level:
         text_surf: Surface = text_font.render(text, True, text_color)
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
         self.window.blit(source=text_surf, dest=text_rect)
+
+    def game_over(self):
+        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 2, W_HEIGHT // 2))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+        sys.exit()
