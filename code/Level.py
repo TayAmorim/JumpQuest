@@ -86,8 +86,10 @@ class Level:
                     new_position = (W_WIDTH, W_HEIGHT - 35 - self.obstacle_spacing)
                     self.entity_list.append(EntityFactory.build_entity(choice, new_position))
 
-            self.level_text(18, f'{self.name} - Timeout: {self.timeout / 1000 :.1f}s', C_WHITE_BLUE, (10, 10))
-            self.level_text(18, f'Score: {player_score}', C_WHITE_BLUE, (10, 30))
+            self.level_text(20, f'{self.name} - Timeout: {self.timeout / 1000 :.1f}s', C_WHITE_BLUE, (10, 10))
+            self.level_text(20, f'Score: {player_score}', C_WHITE_BLUE, (10, 30))
+            self.level_text(18, f'Move Forward: Space key + Right Arrow', C_RED, (10, 60))
+            self.level_text(18, f'Move Backward: Space key + Left Arrow', C_RED, (10, 80))
             pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
