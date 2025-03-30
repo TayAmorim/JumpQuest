@@ -19,6 +19,7 @@ class Player(Entity):
         self.gravity = 0.5
         self.jump_strength = -10
         self.grounded = True
+        self.count_damage = 0
 
 
 
@@ -62,7 +63,12 @@ class Player(Entity):
         screen.blit(self.surf, self.rect)
 
     def check_collision(self, obstacle):
-        if self.rect.colliderect(obstacle.rect):
-            print("Colisão detectada!")
+        centre_x = obstacle.rect.centerx
+        centre_y = obstacle.rect.centery
+
+        if (self.rect.left <= centre_x <= self.rect.right and
+                self.rect.top <= centre_y <= self.rect.bottom):
+            self.count_damage += 1
             return True
         return False
+

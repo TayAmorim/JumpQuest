@@ -5,7 +5,8 @@ import pygame.mixer_music
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import MENU_OPTION, EVENT_OBSTACLE, SPAWN_TIME, C_RED, W_HEIGHT, W_WIDTH
+from code.Const import MENU_OPTION, EVENT_OBSTACLE, SPAWN_TIME, C_RED, W_HEIGHT, W_WIDTH, TIMEOUT_LEVEL, EVENT_TIMEOUT, \
+    TIMEOUT_STEP, C_GRAY
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.Obstacle import Obstacle
@@ -20,10 +21,13 @@ class Level:
         self.entity_list: list[Entity] = []
         self.entity_list.extend(EntityFactory.build_entity(self.name + 'Bg'))
         self.obstacle_spacing = 0
+        self.timeout = TIMEOUT_LEVEL
 
         self.player = EntityFactory.build_entity('Player', (10, W_HEIGHT - 50))
 
         pygame.time.set_timer(EVENT_OBSTACLE, SPAWN_TIME)
+        pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
+
 
     def run(self):
         pygame.mixer_music.load(f'./asset/{self.name}.mp3')
@@ -37,16 +41,21 @@ class Level:
                 ent.move()
 
                 if isinstance(ent, Obstacle):
-                    self.player.check_collision(ent)
+                  if self.player.check_collision(ent):
+                    if not self.game_over():
+                        return
 
             self.player.move()
             self.player.draw(self.window)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return
+                    return False
 
-
+                if event.type == EVENT_TIMEOUT:
+                    self.timeout -= TIMEOUT_STEP
+                    if self.timeout == 0:
+                        return True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.player.jump()
@@ -72,6 +81,7 @@ class Level:
                     new_position = (W_WIDTH, W_HEIGHT - 35 - self.obstacle_spacing)
                     self.entity_list.append(EntityFactory.build_entity(choice, new_position))
 
+            self.level_text(18, f'{self.name} - Timeout: {self.timeout / 1000 :.1f}s', C_GRAY, (10, 5))
             pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
@@ -81,7 +91,23 @@ class Level:
         self.window.blit(source=text_surf, dest=text_rect)
 
     def game_over(self):
-        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 2, W_HEIGHT // 2))
+        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 3, 10))
         pygame.display.flip()
-        pygame.time.wait(2000)
-        sys.exit()
+        game_over_screen = True
+
+        while game_over_screen:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        game_over_screen = False
+                        return False
+                    elif event.key == pygame.K_RETURN:
+                        game_over_screen = False
+                        return True
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return False

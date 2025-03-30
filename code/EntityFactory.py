@@ -16,6 +16,13 @@ class EntityFactory:
                     list_bg.append(Background(f'Level1Bg{i}', (W_WIDTH, 0)))
                 return list_bg
 
+            case 'Level2Bg':
+                list_bg = []
+                for i in range(3):
+                    list_bg.append(Background(f'Level2Bg{i}', position))
+                    list_bg.append(Background(f'Level2Bg{i}', (W_WIDTH, 0)))
+                return list_bg
+
             case 'Obstacle1':
                 obstacle_width = 32
                 obstacle_height = 32
