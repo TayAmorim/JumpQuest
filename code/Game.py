@@ -10,22 +10,17 @@ class Game:
         pygame.init()
         self.window = pygame.display.set_mode(size=(W_WIDTH , W_HEIGHT))
 
-
     def run (self, ):
         while True:
+
             menu = Menu(self.window)
             menu_return = menu.run()
 
             if menu_return in MENU_OPTION[0]:
-                level = Level(self.window, 'Level1', menu_return)
-                leve_return = level.run()
-                if not leve_return:
-                    menu = Menu(self.window)
-                    menu.run()
+                player_score = 0
+                level = Level(self.window, 'Level1', menu_return, player_score)
+                leve_return = level.run(player_score)
                 if leve_return:
-                    level = Level(self.window, 'Level2', menu_return)
-                    leve_return = level.run()
-                    if not leve_return:
-                        menu = Menu(self.window)
-                        menu.run()
+                    level = Level(self.window, 'Level2', menu_return, player_score)
+                    leve_return = level.run(player_score)
 

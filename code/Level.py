@@ -6,7 +6,7 @@ from pygame import Surface, Rect
 from pygame.font import Font
 
 from code.Const import MENU_OPTION, EVENT_OBSTACLE, SPAWN_TIME, C_RED, W_HEIGHT, W_WIDTH, TIMEOUT_LEVEL, EVENT_TIMEOUT, \
-    TIMEOUT_STEP, C_GRAY
+    TIMEOUT_STEP, C_GRAY, C_WHITE_BLUE
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.Obstacle import Obstacle
@@ -14,7 +14,7 @@ from code.Player import Player
 
 
 class Level:
-    def __init__(self, window: Surface, name: str, game_mode: str):
+    def __init__(self, window: Surface, name: str, game_mode: str, player_score: int):
         self.window = window
         self.name = name
         self.game_mode = game_mode
@@ -29,7 +29,7 @@ class Level:
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
 
 
-    def run(self):
+    def run(self, player_score: int):
         pygame.mixer_music.load(f'./asset/{self.name}.mp3')
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
@@ -50,10 +50,12 @@ class Level:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return False
+                    pygame.quit()
+                    sys.exit()
 
                 if event.type == EVENT_TIMEOUT:
                     self.timeout -= TIMEOUT_STEP
+                    player_score += 1
                     if self.timeout == 0:
                         return True
                 if event.type == pygame.KEYDOWN:
@@ -81,17 +83,18 @@ class Level:
                     new_position = (W_WIDTH, W_HEIGHT - 35 - self.obstacle_spacing)
                     self.entity_list.append(EntityFactory.build_entity(choice, new_position))
 
-            self.level_text(18, f'{self.name} - Timeout: {self.timeout / 1000 :.1f}s', C_GRAY, (10, 5))
+            self.level_text(18, f'{self.name} - Timeout: {self.timeout / 1000 :.1f}s', C_WHITE_BLUE, (10, 10))
+            self.level_text(18, f'Score: {player_score}', C_WHITE_BLUE, (10, 30))
             pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
-        text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
+        text_font: Font = pygame.font.SysFont(name="Gill Sans", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color)
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
         self.window.blit(source=text_surf, dest=text_rect)
 
     def game_over(self):
-        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 3, 10))
+        self.level_text(50, "Game Over", C_RED, (W_WIDTH // 4, 10))
         pygame.display.flip()
         game_over_screen = True
 
